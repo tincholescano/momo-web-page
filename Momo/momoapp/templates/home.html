@@ -1,95 +1,123 @@
 <html>
-<head>
-	{% load static %}
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js">
+    <head>
+        <style>
+            #meme {
+                width: 30%;
+            }
+        </style>
+        {% load static %}
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{% static 'css.css' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <title>MOMOS</title>
+    </head>
+    <body>
+        <!-- Dropdown Structure -->
+        <ul id="userdrop" class="dropdown-content log-in black white-text">
+            {% if user.is_authenticated %}  
+            <li><a href="/profile" class="white-text"><i class="material-icons white-text">perm_identity</i>Profile</a></li>
+            <li><a href="{% url 'logout' %}" class="white-text"><i class="material-icons white-text">input</i>Logout</a></li>
+            {% else %}
+            <form action="{% url 'login' %}" method="POST" accept-charset="utf-8">
+                {% csrf_token %}
+                <input type="Text" name="username" placeholder="Username"><br>
+                <input type="Password" name="password" placeholder="Password"><br>
+                <button class="btn center waves-effect waves-white black white-text" type="submit">LogIn</button>
+                <a class="btn center waves-effect waves-white black white-text" href="{% url 'signup' %}">signup</a>
+            </form>
+            {% endif %}
+        </ul>
+        <nav class="nav-extended black">
+            <div class="nav-wrapper">
+                <a class="waves-effect waves-light dropdown-button right" data-activates="userdrop"><i class="material-icons left">person</i>{{user.first_name|upper}}</a>
+                <a href="/" class="brand-logo center">MOMO<i class="material-icons">whatshot</i></a>
+            </div>
+            <div class="nav-content">
+                <ul class="tabs tabs-transparent">
+                    <li class="tab"><a href="#test1">MAIN PAGE<i class="material-icons left">panorama_fish_eye</i></a></li>
+                    <li class="tab"><a href="#test2">IMAGES<i class="material-icons left">collections</i></a></li>
+                    <li class="tab disabled"><a href="#test3">GIFS<i class="material-icons left">gif</i></a></li>
+                    <li class="tab"><a href="#test4">PROFILE</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fixed-action-btn horizontal">
+            <a class="btn-floating btn-large black" href="model_form_upload">
+                <i class="large material-icons">add</i>
+            </a>
+            <ul>
+                <li><a href="model_form_upload" class="btn-floating blue-grey"><i class="material-icons">image</i></a></li>
+                <li><a href="model_form_upload" class="btn-floating blue-grey darken-1"><i class="material-icons">gif</i></a></li>
+            </ul>
+        </div>
+        <div id="test1" class="col s12">
+            <form action="{% url 'display_document' %}" accept-charset="utf-8">
+                {% csrf_token %}
+                {% for obj in documents %}
+                <div class="w3-container w3-center">
+                    <img src="{{ obj.document.url }}" alt="POST" style="width:80%">
+                </div>
+                {% endfor %}
+            </form>
+            {% if user.is_authenticated %}
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="waves-effect black waves-light btn" type="submit">POST</button>
+            </form>
+            {% else %}
+            You must log in to upload a post
+            {% endif %}
+        </div>
+        <div id="test2" class="col s12">
 
+        </div>
+        <div id="test3" class="col s12">GIFS</div>
+        <div id="test4" class="col s12">
+            {% if user.is_authenticated %}    
+            <h2>Welcome, {{ user.get_full_name }} <small>{{ user.username }}</small>!</h2>
+            {% else %}
+            <form action="{% url 'signup' %}" method="post" accept-charset="utf-8">
+                {% csrf_token %}
+                {% for field in form %}
+                <p>
+                    {{ field.label_tag }}<br>
+                <p style="color: black">{{ field }}</p>
+                {% if field.help_text %}
+                <small style="color: grey">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+                {% endfor %}
+                </p>
+            {% endfor %}
+            <button class="waves-effect black waves-light btn" type="submit">SIGN UP</button>
+            {% endif %}
+
+            </form>
+
+
+        </div>
+    <script>
+        $('.dropdown-button').dropdown({
+            inDuration: 300,
+            outDuration: 225,
+            constrainWidth: false, // Does not change width of dropdown to that of the activator
+            hover: true, // Activate on hover
+            gutter: 0, // Spacing from edge
+            belowOrigin: false, // Displays dropdown below the button
+            alignment: 'left', // Displays dropdown with edge aligned to the left of button
+            stopPropagation: false // Stops event propagation
+        }
+                                      );
     </script>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="{% static 'css.css' %}">
-</head>
-<body class="white">
-  <nav class="nav-extended blue-grey darken-4">
-    <div class="nav-wrapper">
-      <a href="" class="brand-logo center">MOMO</a>
-      <a href="" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="/admin">Iniciar sesion</a></li>
-      </ul>
-      <ul class="side-nav" id="mobile-demo">
-        <li><a href="/admin">Iniciar sesion</a></li>
-      </ul>
-    </div>
-    <div class="nav-content">
-      <ul class="tabs tabs-transparent">
-        <li class="tab"><a href="#test1">PAGINA PRINCIPAL</a></li>
-        <li class="tab"><a href="#test2">IMAGENES</a></li>
-        <li class="tab disabled"><a href="#test3">GIFS</a></li>
-        <li class="tab"><a href="#test4">PERFIL</a></li>
-      </ul>
-    </div>
-  </nav>
-  <div id="test1" class="col s12">
-    
-    <div class="card small col s4">
-            <div class="card-image waves-effect waves-block waves-light">
-              <img class="activator" src="">
-            </div>
-            <div class="card-content">
-              <span class="card-title activator grey-text text-darken-4"><i class="material-icons right">more_vert</i></span>
-              <p><a href=""><i class="material-icons red-text">favorite</i></a></p>
-            </div>
-            <div class="card-reveal">
-              <span class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
-              <p></p>
-            </div>
-          </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    </div>
-  <div id="test2" class="col s12">IMAGENES</div>
-  <div id="test3" class="col s12">GIFS</div>
-  <div id="test4" class="col s12">PERFIL</div>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     </body>
 </html>

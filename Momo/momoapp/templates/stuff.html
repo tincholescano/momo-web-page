@@ -1,0 +1,25 @@
+        <ul>
+            {% for obj in documents %}
+            <li>
+                <div class="w3-container">
+                    <h2>Image post</h2>
+
+                    <div class="w3-card-4 w3-dark-grey" style="width:25%">
+
+                        <div class="w3-container w3-center">
+                            <h3>{{ obj.document.name }}</h3>
+                            <img src="{{ obj.document.url }}" alt="Avatar" style="width:80%">
+                            <button class="w3-button w3-green">LIKE</button>
+                            <button class="w3-button w3-red">DISLIKE</button>
+                            <h5><p>(Uploaded at: {{ obj.uploaded_at }})</p></h5>
+
+                            <div class="w3-section">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </li>
+            {% endfor %}
+        </ul> 

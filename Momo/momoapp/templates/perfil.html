@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <style>
+            #meme {
+                max-width: 50%;
+                height: 50%;
+            }
+            #sidebar{
+                margin-top: 5%;
+            }
+            body {
+                margin-left: 20%;
+            }
+
+        </style>
+        {% load static %}
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js">
+
+        </script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{% static 'css.css' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    </head>
+    <body class="white">
+        <ul id="userdrop" class="dropdown-content log-in black white-text">
+            {% if user.is_authenticated %}  
+            <li><a href="{% url 'logout' %}" class="white-text"><i class="material-icons white-text">input</i>Logout</a></li>
+            {% else %}
+            <form action="{% url 'login' %}" method="POST" accept-charset="utf-8">
+                {% csrf_token %}
+                <input type="Text" name="username" placeholder="Username"><br>
+                <input type="Password" name="password" placeholder="Password"><br>
+                <button class="btn waves-effect waves-white black white-text" type="submit">LogIn</button>
+            </form>
+            {% endif %}
+        </ul>
+        <nav class="nav-extended black">
+            <div class="nav-wrapper">
+                <a id="asd" class="waves-effect waves-light dropdown-button right" data-activates="userdrop"><i class="material-icons left">person</i>{{user.first_name|upper}}</a>
+                <a href="/" class="brand-logo center">MOMO<i class="material-icons">whatshot</i></a>
+            </div>
+        </nav>
+
+        <ul id="sidebar" class="side-nav fixed">
+            <img src="/home/tincho/Momo/media/documents/Board1.jpg">
+            <li><div class="divider"></div></li>
+            <li><a href=""><i class="material-icons">fingerprint</i>{{ user.username }}</a></li>
+            <li><div class="divider"></div></li>
+            <li><a href=""><i class="material-icons">portrait</i>{{ user.first_name }}  {{ user.last_name }}</a></li>
+            <li><a href="https://mail.google.com/"><i class="material-icons">mail</i>{{ user.email }}</a></li>
+        </ul>
+
+
+
+        <div id="meme" class="w3-container ">
+            {% for obj in documents %}
+
+            <div class="w3-card-4 waves-effect waves-block waves-light" style="width:50%">
+                <img src="{{ obj.document.url }}" alt="Avatar" style="width:80%">
+                <div class="w3-container w3-center">
+                    <div class="card-content">
+                        <a>{{user|upper}}{{posts.datetime|date:"d/M/Y"}}</a>
+                        <button class="w3-button"><i class="material-icons red-text">favorite_border</i></button>
+                        <button class="w3-button"><i class="material-icons green-text">add_circle_outline</i></button>
+                        <button class="w3-button"><i class="material-icons gray-text">delete</i></button>
+                    </div>
+
+
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+
+
+        <script>
+            $('.dropdown-button').dropdown({
+                inDuration: 300,
+                outDuration: 225,
+                constrainWidth: false, // Does not change width of dropdown to that of the activator
+                hover: true, // Activate on hover
+                gutter: 0, // Spacing from edge
+                belowOrigin: false, // Displays dropdown below the button
+                alignment: 'left', // Displays dropdown with edge aligned to the left of button
+                stopPropagation: false // Stops event propagation
+            }
+                                          );
+        </script>
+    </body>
+</html>
